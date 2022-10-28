@@ -34,14 +34,20 @@ require_once('close.php');
     <main class="container">
         <div class="row">
             <section class="col-12">
+                <?php
+                if (!empty($_SESSION['erreur'])){
+                    echo '<div class="alert alert-danger" role="alert">
+                            '. $_SESSION['erreur'].'
+                            </div>';
+                        $_SESSION['erreur'] = "";
+                }
+                ?>
                 <h1>Liste des livres</h1>
                 <table class="table">
                     <thead>
                         <th>ID</th>
                         <th>Titre</th>
                         <th>Auteur</th>
-                        <th>Prix</th>
-                        <th>Actions</th>
                     <tbody>
                         <?php
                         // On boucle sur la variable result
@@ -52,7 +58,7 @@ require_once('close.php');
                                 <td><?= $book['title'] ?></td>
                                 <td><?= $book['author_id'] ?></td>
                                 <td></td>
-                                <td><a href="details.php?id=<?= $book['id']?>">Voir</a></td>
+                                <td><a href="details.php?id=<?= $book['id'] ?>">Voir</a></td>
                             </tr>
                         <?php
                         }
