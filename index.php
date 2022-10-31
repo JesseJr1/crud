@@ -5,7 +5,7 @@ session_start();
 // On inclut la connexion à la base 
 require_once('connect.php');
 
-$sql = 'SELECT * FROM `books`';
+$sql = 'SELECT books.*, authors.firstname, authors.lastname FROM books LEFT JOIN authors on authors.id = books.author_id;';
 
 // On prepare la requete 
 $query = $db->prepare($sql);
@@ -35,11 +35,19 @@ require_once('close.php');
         <div class="row">
             <section class="col-12">
                 <?php
-                if (!empty($_SESSION['erreur'])){
+                if (!empty($_SESSION['erreur'])) {
                     echo '<div class="alert alert-danger" role="alert">
-                            '. $_SESSION['erreur'].'
+                            ' . $_SESSION['erreur'] . '
                             </div>';
-                        $_SESSION['erreur'] = "";
+                    $_SESSION['erreur'] = "";
+                }
+                ?>
+                <?php
+                if (!empty($_SESSION['message'])) {
+                    echo '<div class="alert alert-success" role="alert">
+                            ' . $_SESSION['message'] . '
+                            </div>';
+                    $_SESSION['message'] = "";
                 }
                 ?>
                 <h1>Liste des livres</h1>
@@ -48,6 +56,7 @@ require_once('close.php');
                         <th>ID</th>
                         <th>Titre</th>
                         <th>Auteur</th>
+                        <th>Détails</th>
                     <tbody>
                         <?php
                         // On boucle sur la variable result
@@ -56,9 +65,8 @@ require_once('close.php');
                             <tr>
                                 <td><?= $book['id'] ?></td>
                                 <td><?= $book['title'] ?></td>
-                                <td><?= $book['author_id'] ?></td>
-                                <td></td>
-                                <td><a href="details.php?id=<?= $book['id'] ?>">Voir</a></td>
+                                <td><?= $book['firstname'] . " " . $book['lastname'] ?></td>
+                                <td><a href="details.php?id=<?= $book['id'] ?>">Voir</a> <a href="edit.php?id=<?= $book['id'] ?>">Modifier</a></td>
                             </tr>
                         <?php
                         }
