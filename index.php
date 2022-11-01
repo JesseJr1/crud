@@ -57,6 +57,7 @@ require_once('close.php');
                         <th>Titre</th>
                         <th>Auteur</th>
                         <th>Détails</th>
+                        <th>Supprimer</th>
                     <tbody>
                         <?php
                         // On boucle sur la variable result
@@ -67,6 +68,7 @@ require_once('close.php');
                                 <td><?= $book['title'] ?></td>
                                 <td><?= $book['firstname'] . " " . $book['lastname'] ?></td>
                                 <td><a href="details.php?id=<?= $book['id'] ?>">Voir</a> <a href="edit.php?id=<?= $book['id'] ?>">Modifier</a></td>
+                                <td><a href="delete.php?id=<?= $book['id'] ?>">Supprimer</a></td>
                             </tr>
                         <?php
                         }

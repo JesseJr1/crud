@@ -106,7 +106,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <input type="text" id="books" name="books" class="form-control" value="<?= $book['title'] ?>">
                     </div>
                     <div class="form-group">
-                        <label for="authors">Auteurs</label>
+                        <label for="authors">Auteurs</label> 
                         <!-- Je dois associer les values -->
                         <select id="authors" name="authors" class="form-control" value="<?= $book['author_id'] ?>"> 
                             <option value="">(selectionnez un auteur)</option>
@@ -115,7 +115,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             <option value="">Autre</option>
                         </select>
                     </div>
-                    <input type="hidden" value="<? $book['id'] ?>">
+                    <input type="hidden" value="<? $book['id'] ?>" name="id">
                     <button class="btn btn-primary">Modifier</button>
                 </form>
             </section>
