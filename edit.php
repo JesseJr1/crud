@@ -1,12 +1,14 @@
 <?php
 // On démarre une session
 session_start();
+$_SESSION['erreur'] = "";
+$_SESSION['message'] = "";
 
-if ($_POST) {
+if (isset($_POST['edit'])) { //var_dump($_POST); die();
     if (
         isset($_POST['id']) && !empty($_POST['id'])
         && isset($_POST['books']) && !empty($_POST['books'])
-        && isset($_POST['authors']) && !empty($_POST['authors'])
+        && isset($_POST['author_id']) && !empty($_POST['author_id'])
     ) {
         // On inclut la connexion à la base 
         require_once('connect.php');
@@ -14,9 +16,9 @@ if ($_POST) {
         // On nettoie les données envoyées
         $id = strip_tags($_POST['id']);
         $book = strip_tags($_POST['books']);
-        $authors = strip_tags($_POST['authors']);
+        $authors = strip_tags($_POST['author_id']);
 
-        $sql = 'UPDATE `books` SET `title`=:title, `authors`=:author_id WHERE `id=:id`;';
+        $sql = 'UPDATE `books` SET `title`=:title, `author_id`=:author_id WHERE `id`=:id;';
         // $sql = 'SELECT books.*, authors.firstname, authors.lastname FROM books LEFT JOIN authors on authors.id = books.author_id;';
         // Je pense devoir joindre mes tables afin de voir correctement le nom de l'auteur (la requete UPDATE n'est pas bonne)
 
@@ -25,14 +27,13 @@ if ($_POST) {
         $query = $db->prepare($sql);
 
         $query->bindValue(':id', $id, PDO::PARAM_INT);
-        $query->bindValue(':books', $book, PDO::PARAM_STR);
-        $query->bindValue(':authors', $authors, PDO::PARAM_STR);
+        $query->bindValue(':title', $book, PDO::PARAM_STR);
+        $query->bindValue(':author_id', $authors, PDO::PARAM_INT);
 
         $query->execute();
 
         $_SESSION['message'] = "Livre modifié";
         require_once('close.php');
-
         header('location: index.php');
     } else {
         $_SESSION['erreur'] = "Le formulaire est incomplete";
@@ -106,17 +107,17 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <input type="text" id="books" name="books" class="form-control" value="<?= $book['title'] ?>">
                     </div>
                     <div class="form-group">
-                        <label for="authors">Auteurs</label> 
+                        <label for="authors">Auteurs</label>
                         <!-- Je dois associer les values -->
-                        <select id="authors" name="authors" class="form-control" value="<?= $book['author_id'] ?>"> 
-                            <option value="">(selectionnez un auteur)</option>
-                            <option value="">J.R.R Tolkien</option>
-                            <option value="">J.K Rowling</option>
-                            <option value="">Autre</option>
+                        <select id="authors" name="author_id" class="form-control" value="<?= $book['author_id'] ?>">
+                            <?php foreach ($authors as $author) {
+                                echo '<option value="' . $author['id'] . '">' . $author['firstname'] . " " . $author['lastname'] . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                     <input type="hidden" value="<? $book['id'] ?>" name="id">
-                    <button class="btn btn-primary">Modifier</button>
+                    <button type="submit" class="btn btn-primary" name="edit">Modifier</button>
                 </form>
             </section>
         </div>

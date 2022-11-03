@@ -1,6 +1,7 @@
 <?php
 // On démarre une session
 session_start();
+$_SESSION['erreur'] = "";
 
 // Est-ce que l'id existe et n'est pas vide dans l'URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
@@ -9,7 +10,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     // On nettoie l'id envoyé
     $id = strip_tags($_GET['id']);
 
-    $sql = 'DELETE FROM `books` WHERE id = :id;';
+    $sql = 'SELECT * FROM `books` WHERE id = :id;';
 
     // On prépare la requete 
     $query = $db->prepare($sql);

@@ -2,10 +2,14 @@
 // On démarre une session
 session_start();
 
+// On inclut la connexion à la base 
+require_once('connect.php');
+
+
 if ($_POST) {
     if (
         isset($_POST['books']) && !empty($_POST['books'])
-        && isset($_POST['author_id']) && !empty($_POST['authors_id'])
+        && isset($_POST['author_id']) && !empty($_POST['author_id'])
     ) {
         // On inclut la connexion à la base 
         require_once('connect.php');
@@ -21,7 +25,7 @@ if ($_POST) {
 
         $query = $db->prepare($sql);
 
-        $query->bindValue(':books', $book, PDO::PARAM_STR);
+        $query->bindValue(':title', $book, PDO::PARAM_STR);
         $query->bindValue(':author_id', $authors, PDO::PARAM_INT);
 
         $query->execute();
@@ -69,8 +73,14 @@ if ($_POST) {
                     </div>
                     <div class="form-group">
                         <label for="authors">Auteurs</label>
-                        <input type="text" id="author_id" name="author_id" class="form-control">
-
+                        <select id="authors" name="author_id" class="form-control">
+                            <?php foreach ($authors as $author) {
+                                var_dump($author); 
+                                echo '<option value="' . $author['id'] . '">' . $author['firstname'] . " " . $author['lastname'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
                     </div>
                     <button class="btn btn-primary">Ajout du livre</button>
                 </form>
