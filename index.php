@@ -5,6 +5,11 @@ session_start();
 // On inclut la connexion à la base 
 require_once('connect.php');
 
+$allbooks = $db->query('SELECT * FROM `books` ORDER BY id DESC');
+if(isset($_GET['search']) && !empty($_GET['search'])){
+    $search = htmlspecialchars($_GET['search']);
+    $allbooks = $db->query('SELECT title FROM books WHERE title LIKE "%'.$search.'%" ORDER BY id DESC');
+}
 $sql = 'SELECT books.*, authors.firstname, authors.lastname FROM books LEFT JOIN authors on authors.id = books.author_id;';
 
 // On prepare la requete 
@@ -17,6 +22,17 @@ $query->execute();
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
 require_once('close.php');
+
+###### POUR LE FILTRE ######
+// <div>
+// <form method="GET">
+// <input type="search" name="title-search" placeholder="Rechercher un livre">
+// <input type="submit" name="submit">
+// <!-- <input type="search" name="author-search" placeholder="Rechercher un auteur">
+// <input type="submit" name="submit">
+// </form> -->
+// </div>
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
