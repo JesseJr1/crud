@@ -10,5 +10,6 @@ try {
 $authorsQuery = $db->query("SELECT * FROM authors");
 $authors = $authorsQuery->fetchAll(PDO::FETCH_ASSOC);
 
+
 // $bookQuery = $db->query("SELECT * FROM book");
 // $allbooks = $bookQuery->fetchAll(PDO::FETCH_ASSOC);

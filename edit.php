@@ -14,24 +14,20 @@ if (isset($_POST['edit'])) { //var_dump($_POST); die();
         require_once('connect.php');
 
         // On nettoie les données envoyées
-        $id = strip_tags($_POST['id']);
-        $book = strip_tags($_POST['books']);
-        $authors = strip_tags($_POST['author_id']);
+        $id = $_POST['id'];
+        $titleBook = strip_tags($_POST['books']);
+        $idAuthor = strip_tags($_POST['author_id']);
 
-        $sql = 'UPDATE `books` SET `title`=:title, `author_id`=:author_id WHERE `id`=:id;';
-        // $sql = 'SELECT books.*, authors.firstname, authors.lastname FROM books LEFT JOIN authors on authors.id = books.author_id;';
-        // Je pense devoir joindre mes tables afin de voir correctement le nom de l'auteur (la requete UPDATE n'est pas bonne)
-
-
-
+        $sql = 'UPDATE `books` SET `title`=:title, `author_id`=:author_id WHERE `id`=:id';
+        
         $query = $db->prepare($sql);
 
         $query->bindValue(':id', $id, PDO::PARAM_INT);
-        $query->bindValue(':title', $book, PDO::PARAM_STR);
-        $query->bindValue(':author_id', $authors, PDO::PARAM_INT);
+        $query->bindValue(':title', $titleBook, PDO::PARAM_STR);
+        $query->bindValue(':author_id', $idAuthor, PDO::PARAM_INT);
 
         $query->execute();
-
+        
         $_SESSION['message'] = "Livre modifié";
         require_once('close.php');
         header('location: index.php');
@@ -116,7 +112,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             ?>
                         </select>
                     </div>
-                    <input type="hidden" value="<? $book['id'] ?>" name="id">
+                    <input type="hidden" value="<?php echo $book['id']; ?>" name="id">
                     <button type="submit" class="btn btn-primary" name="edit">Modifier</button>
                 </form>
             </section>
